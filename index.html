@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python开发者的个人博客</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/marked@4.0.0/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.7.0/lib/highlight.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.7.0/styles/atom-one-dark.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3B82F6',
+                        secondary: '#10B981',
+                        dark: '#1E293B',
+                        light: '#F8FAFC'
+                    },
+                    fontFamily: {
+                        inter: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .markdown-content h1 {
+                @apply text-2xl font-bold mb-4 mt-6;
+            }
+            .markdown-content h2 {
+                @apply text-xl font-bold mb-3 mt-5;
+            }
+            .markdown-content h3 {
+                @apply text-lg font-bold mb-2 mt-4;
+            }
+            .markdown-content p {
+                @apply mb-3;
+            }
+            .markdown-content ul {
+                @apply list-disc pl-5 mb-3;
+            }
+            .markdown-content ol {
+                @apply list-decimal pl-5 mb-3;
+            }
+            .markdown-content a {
+                @apply text-primary hover:underline;
+            }
+            .markdown-content code:not(pre code) {
+                @apply bg-gray-100 text-gray-800 px-1 py-0.5 rounded text-sm;
+            }
+            .markdown-content blockquote {
+                @apply border-l-4 border-primary pl-4 italic my-4;
+            }
+        }
+    </style>
+</head>
+<body class="font-inter bg-gray-50 text-dark">
+    <!-- 导航栏 -->
+    <header class="bg-white shadow-md fixed w-full z-50 transition-all duration-300" id="navbar">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <a href="#" class="text-primary font-bold text-xl flex items-center">
+                        <i class="fa fa-code mr-2"></i>
+                        <span>Python开发者博客</span>
+                    </a>
+                </div>
+                <nav class="hidden md:flex space-x-8">
+                    <a href="#home" class="text-gray-700 hover:text-primary px-3 py-2 font-medium transition-colors">首页</a>
+                    <a href="#articles" class="text-gray-700 hover:text-primary px-3 py-2 font-medium transition-colors">文章</a>
+                    <a href="#about" class="text-gray-700 hover:text-primary px-3 py-2 font-medium transition-colors">关于我</a>
+                    <a href="#upload" class="bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-md font-medium transition-colors">
+                        <i class="fa fa-upload mr-1"></i> 上传文章
+                    </a>
+                </nav>
+                <div class="md:hidden">
+                    <button type="button" id="menu-toggle" class="text-gray-700 hover:text-primary focus:outline-none">
+                        <i class="fa fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 移动端菜单 -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white shadow-lg absolute w-full">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="#home" class="text-gray-700 hover:text-primary block px-3 py-2 font-medium">首页</a>
+                <a href="#articles" class="text-gray-700 hover:text-primary block px-3 py-2 font-medium">文章</a>
+                <a href="#about" class="text-gray-700 hover:text-primary block px-3 py-2 font-medium">关于我</a>
+                <a href="#upload" class="bg-primary hover:bg-primary/90 text-white block px-4 py-2 rounded-md font-medium text-center mt-4">
+                    <i class="fa fa-upload mr-1"></i> 上传文章
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- 英雄区域 -->
+    <section id="home" class="pt-24 pb-16 bg-gradient-to-br from-primary/5 to-secondary/5">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row items-center">
+                <div class="md:w-1/2 mb-8 md:mb-0">
+                    <h1 class="text-[clamp(2rem,5vw,3.5rem)] font-bold text-dark leading-tight">
+                        分享<span class="text-primary">Python</span>开发的乐趣与经验
+                    </h1>
+                    <p class="text-gray-600 text-lg mt-4 mb-6 max-w-xl">
+                        专注于Python开发、数据科学和Web开发。在这里，我分享我的编程经验、项目和学习资源。
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="#articles" class="bg-primary hover:bg-primary/90 text-white px-6 py-3 rounded-md font-medium transition-all transform hover:scale-105">
+                            浏览文章
+                        </a>
+                        <a href="#about" class="bg-white hover:bg-gray-50 text-primary border border-primary px-6 py-3 rounded-md font-medium transition-all transform hover:scale-105">
+                            了解更多
+                        </a>
+                    </div>
+                </div>
+                <div class="md:w-1/2 flex justify-center">
+                    <div class="w-64 h-64 md:w-80 md:h-80 rounded-full bg-primary/10 flex items-center justify-center">
+                        <img src="https://picsum.photos/seed/python-dev/300/300" alt="Python开发者照片" class="w-56 h-56 md:w-72 md:h-72 rounded-full object-cover shadow-lg">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 文章列表区域 -->
+    <section id="articles" class="py-16 bg-white">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-[clamp(1.5rem,3vw,2.5rem)] font-bold text-dark mb-4">
+                    最新文章
+                </h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">
+                    探索我的Python开发经验和技术分享，从基础知识到高级技巧，应有尽有。
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- 文章卡片 1 -->
+                <article class="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-shadow group">
+                    <div class="h-48 overflow-hidden">
+                        <img src="https://picsum.photos/seed/python1/600/400" alt="Python数据可视化" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                    </div>
+                    <div class="p-6">
+                        <div class="flex items-center text-xs text-gray-500 mb-3">
+                            <span class="bg-blue-100 text-blue-800 px-2 py-0.5 rounded">Python</span>
+                            <span class="mx-2">•</span>
+                            <span>2025年6月10日</span>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2 group-hover:text-primary transition-colors">
+                            Python数据可视化最佳实践
+                        </h3>
+                        <p class="text-gray-600 mb-4 line-clamp-3">
+                            探索Python中各种数据可视化库的使用技巧，包括Matplotlib、Seaborn和Plotly，以及如何创建专业的数据可视化图表。
+                        </p>
+                        <a href="#" class="text-primary font-medium inline-flex items-center hover:underline">
+                            阅读更多
+                            <i class="fa fa-arrow-right ml-1 text-sm"></i>
+                        </a>
+                    </div>
+                </article>
+
+                <!-- 文章卡片 2 -->
+                <article class="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-shadow group">
+                    <div class="h-48 overflow-hidden">
+                        <img src="https://picsum.photos/seed/python2/600/400" alt="Django框架" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                    </div>
+                    <div class="p-6">
+                        <div class="flex items-center text-xs text-gray-500 mb-3">
+                            <span class="bg-green-100 text-green-800 px-2 py-0.5 rounded">Django</span>
+                            <span class="mx-2">•</span>
+                            <span>2025年6月5日</span>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2 group-hover:text-primary transition-colors">
+                            使用Django构建高性能Web应用
+                        </h3>
+                        <p class="text-gray-600 mb-4 line-clamp-3">
+                            本文介绍如何使用Django框架构建高效、安全的Web应用程序，包括模型设计、视图优化和部署策略。
+                        </p>
+                        <a href="#" class="text-primary font-medium inline-flex items-center hover:underline">
+                            阅读更多
+                            <i class="fa fa-arrow-right ml-1 text-sm"></i>
+                        </a>
+                    </div>
+                </article>
+
+                <!-- 文章卡片 3 -->
+                <article class="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-shadow group">
+                    <div class="h-48 overflow-hidden">
+                        <img src="https://picsum.photos/seed/python3/600/400" alt="Python自动化测试" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                    </div>
+                    <div class="p-6">
+                        <div class="flex items-center text-xs text-gray-500 mb-3">
+                            <span class="bg-purple-100 text-purple-800 px-2 py-0.5 rounded">测试</span>
+                            <span class="mx-2">•</span>
+                            <span>2025年5月28日</span>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2 group-hover:text-primary transition-colors">
+                            Python自动化测试实战指南
+                        </h3>
+                        <p class="text-gray-600 mb-4 line-clamp-3">
+                            学习如何使用unittest、pytest和其他测试框架为Python项目编写有效的自动化测试，提高代码质量和可维护性。
+                        </p>
+                        <a href="#" class="text-primary font-medium inline-flex items-center hover:underline">
+                            阅读更多
+                            <i class="fa fa-arrow-right ml-1 text-sm"></i>
+                        </a>
+                    </div>
+                </article>
+            </div>
+
+            <div class="text-center mt-12">
+                <a href="#" class="inline-flex items-center px-6 py-3 border border-primary text-primary font-medium rounded-md hover:bg-primary hover:text-white transition-colors">
+                    查看所有文章
+                    <i class="fa fa-long-arrow-right ml-2"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 关于我区域 -->
+    <section id="about" class="py-16 bg-gray-50">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row items-center gap-12">
+                <div class="md:w-2/5">
+                    <div class="relative">
+                        <div class="w-full h-full bg-primary/10 rounded-2xl absolute -top-4 -left-4"></div>
+                        <img src="https://picsum.photos/seed/python-dev2/600/800" alt="Python开发者照片" class="w-full h-auto rounded-2xl shadow-lg relative z-10">
+                    </div>
+                </div>
+                <div class="md:w-3/5">
+                    <h2 class="text-[clamp(1.5rem,3vw,2.5rem)] font-bold text-dark mb-6">
+                        关于我
+                    </h2>
+                    <p class="text-gray-600 mb-4 text-lg">
+                        你好！我是一名Python开发者，拥有5年以上的Python编程经验。我热爱分享知识，通过这个博客，我希望能够将我的经验和见解传递给更多的Python爱好者。
+                    </p>
+                    <p class="text-gray-600 mb-6">
+                        我的专业领域包括Web开发、数据科学和自动化测试。我目前使用Python进行全栈开发，主要技术栈包括Django、Flask、FastAPI等框架，以及NumPy、Pandas等数据科学库。
+                    </p>
+
+                    <div class="mb-8">
+                        <h3 class="text-xl font-bold mb-4">我的技能</h3>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="flex items-center">
+                                <div class="w-32 text-gray-600">Python</div>
+                                <div class="flex-1 h-2 bg-gray-200 rounded-full">
+                                    <div class="h-2 bg-primary rounded-full" style="width: 95%"></div>
+                                </div>
+                            </div>
+                            <div class="flex items-center">
+                                <div class="w-32 text-gray-600">Django/Flask</div>
+                                <div class="flex-1 h-2 bg-gray-200 rounded-full">
+                                    <div class="h-2 bg-primary rounded-full" style="width: 90%"></div>
+                                </div>
+                            </div>
+                            <div class="flex items-center">
+                                <div class="w-32 text-gray-600">数据科学</div>
+                                <div class="flex-1 h-2 bg-gray-200 rounded-full">
+                                    <div class="h-2 bg-primary rounded-full" style="width: 85%"></div>
+                                </div>
+                            </div>
+                            <div class="flex items-center">
+                                <div class="w-32 text-gray-600">自动化测试</div>
+                                <div class="flex-1 h-2 bg-gray-200 rounded-full">
+                                    <div class="h-2 bg-primary rounded-full" style="width: 80%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex space-x-4">
+                        <a href="#" class="bg-gray-200 hover:bg-gray-300 text-gray-700 w-10 h-10 rounded-full flex items-center justify-center transition-colors">
+                            <i class="fa fa-github"></i>
+                        </a>
+                        <a href="#" class="bg-gray-200 hover:bg-gray-300 text-gray-700 w-10 h-10 rounded-full flex items-center justify-center transition-colors">
+                            <i class="fa fa-twitter"></i>
+                        </a>
+                        <a href="#" class="bg-gray-200 hover:bg-gray-300 text-gray-700 w-10 h-10 rounded-full flex items-center justify-center transition-colors">
+                            <i class="fa fa-linkedin"></i>
+                        </a>
+                        <a href="#" class="bg-gray-200 hover:bg-gray-300 text-gray-700 w-10 h-10 rounded-full flex items-center justify-center transition-colors">
+                            <i class="fa fa-envelope"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 文章详情模态框 -->
+    <div id="article-modal" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center">
+        <div class="bg-white rounded-xl max-w-4xl w-full max-h-[90vh] overflow-auto">
+            <div class="p-6 border-b">
+                <div class="flex justify-between items-center">
+                    <h3 class="text-xl font-bold text-dark" id="modal-title">文章标题</h3>
+                    <button id="close-modal" class="text-gray-500 hover:text-gray-700">
+                        <i class="fa fa-times text-xl"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="p-6" id="modal-content">
+                <div class="markdown-content">
+                    <!-- 文章内容将在这里动态加载 -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 上传Markdown区域 -->
+    <section id="upload" class="py-16 bg-white">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-[clamp(1.5rem,3vw,2.5rem)] font-bold text-dark mb-4">
+                    上传Markdown文章
+                </h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">
+                    分享你的Python知识和经验，上传Markdown格式的文章与社区交流。
+                </p>
+            </div>
+
+            <div class="max-w-3xl mx-auto bg-gray-50 rounded-xl shadow-md p-8">
+                <form id="upload-form" class="space-y-6">
+                    <div>
+                        <label for="title" class="block text-sm font-medium text-gray-700 mb-1">文章标题</label>
+                        <input type="text" id="title" name="title" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary focus:border-primary transition-colors" placeholder="输入文章标题">
+                    </div>
+
+                    <div>
+                        <label for="category" class="block text-sm font-medium text-gray-700 mb-1">文章分类</label>
+                        <select id="category" name="category" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary focus:border-primary transition-colors">
+                            <option value="python">Python基础</option>
+                            <option value="web">Web开发</option>
+                            <option value="data">数据科学</option>
+                            <option value="automation">自动化测试</option>
+                            <option value="other">其他</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label for="markdown-file" class="block text-sm font-medium text-gray-700 mb-1">Markdown文件</label>
+                        <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md hover:border-primary transition-colors">
+                            <div class="space-y-1 text-center">
+                                <i class="fa fa-file-text-o text-gray-400 text-4xl"></i>
+                                <div class="flex text-sm text-gray-600">
+                                    <label for="file-upload" class="relative cursor-pointer bg-white rounded-md font-medium text-primary hover:text-primary/80">
+                                        <span>上传Markdown文件</span>
+                                        <input id="file-upload" name="file-upload" type="file" accept=".md" class="sr-only">
+                                    </label>
+                                    <p class="pl-1">或拖放文件</p>
+                                </div>
+                                <p class="text-xs text-gray-500" id="file-name">
+                                    支持 .md 格式文件
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-center">
+                        <button type="submit" id="submit-btn" class="inline-flex items-center px-6 py-3 bg-primary hover:bg-primary/90 text-white font-medium rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                            <i class="fa fa-paper-plane mr-2"></i>
+                            发布文章
+                        </button>
+                    </div>
+                </form>
+
+                <div id="preview-section" class="mt-8 hidden">
+                    <h3 class="text-lg font-bold mb-4">文章预览</h3>
+                    <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                        <div id="markdown-preview" class="markdown-content">
+                            <!-- Markdown预览将在这里动态生成 -->
+                        </div>
+                    </div>
+                </div>
+
+                <div id="upload-success" class="mt-8 p-4 bg-green-50 border border-green-200 rounded-md hidden">
+                    <div class="flex items-center">
+                        <i class="fa fa-check-circle text-green-500 text-xl mr-3"></i>
+                        <div>
+                            <h4 class="text-green-800 font-medium">文章上传成功！</h4>
+                            <p class="text-green-700 text-sm">文章已成功发布到GitHub Pages。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer class="bg-dark text-white py-12">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4">Python开发者博客</h3>
+                    <p class="text-gray-400 mb-4">
+                        分享Python开发的乐趣与经验，从初学者到专业开发者的成长之路。
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <i class="fa fa-github"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <i class="fa fa-twitter"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <i class="fa fa-linkedin"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <i class="fa fa-envelope"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">快速链接</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#home" class="text-gray-400 hover:text-white transition-colors">首页</a></li>
+                        <li><a href="#articles" class="text-gray-400 hover:text-white transition-colors">文章</a></li>
+                        <li><a href="#about" class="text-gray-400 hover:text-white transition-colors">关于我</a></li>
+                        <li><a href="#upload" class="text-gray-400 hover:text-white transition-colors">上传文章</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">文章分类</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Python基础</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Web开发</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">数据科学</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">自动化测试</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">订阅更新</h4>
+                    <p class="text-gray-400 mb-4">
+                        订阅我的博客，获取最新的Python开发技巧和教程。
+                    </p>
+                    <form class="flex">
+                        <input type="email" placeholder="输入你的邮箱" class="px-4 py-2 rounded-l-md focus:outline-none text-dark w-full">
+                        <button type="submit" class="bg-primary hover:bg-primary/90 px-4 py-2 rounded-r-md transition-colors">
+                            <i class="fa fa-paper-plane"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2025 Python开发者博客. 保留所有权利.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // 导航栏滚动效果
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 10) {
+                navbar.classList.add('bg-white/95', 'backdrop-blur-sm', 'shadow-md');
+                navbar.classList.remove('bg-white');
+            } else {
+                navbar.classList.remove('bg-white/95', 'backdrop-blur-sm', 'shadow-md');
+                navbar.classList.add('bg-white');
+            }
+        });
+
+        // 移动端菜单切换
+        const menuToggle = document.getElementById('menu-toggle');
+        const mobileMenu = document.getElementById('mobile-menu');
+        menuToggle.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+
+                    // 关闭移动菜单
+                    if (!mobileMenu.classList.contains('hidden')) {
+                        mobileMenu.classList.add('hidden');
+                    }
+                }
+            });
+        });
+
+        // 文件上传预览功能
+        const fileUpload = document.getElementById('file-upload');
+        const fileName = document.getElementById('file-name');
+        const previewSection = document.getElementById('preview-section');
+        const markdownPreview = document.getElementById('markdown-preview');
+        const submitBtn = document.getElementById('submit-btn');
+        const uploadForm = document.getElementById('upload-form');
+        const uploadSuccess = document.getElementById('upload-success');
+        let markdownContent = '';
+
+        fileUpload.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                fileName.textContent = file.name;
+
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    markdownContent = e.target.result;
+                    renderMarkdown(markdownContent);
+                    previewSection.classList.remove('hidden');
+                };
+                reader.readAsText(file);
+            }
+        });
+
+        function renderMarkdown(content) {
+            // 使用marked解析Markdown
+            const html = marked.parse(content);
+            markdownPreview.innerHTML = html;
+
+            // 为代码块添加语法高亮
+            document.querySelectorAll('pre code').forEach((block) => {
+                hljs.highlightElement(block);
+            });
+        }
+
+        // 表单提交处理
+        uploadForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            // 模拟上传到GitHub的过程
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fa fa-spinner fa-spin mr-2"></i> 上传中...';
+
+            // 模拟API调用
+            setTimeout(() => {
+                uploadSuccess.classList.remove('hidden');
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fa fa-paper-plane mr-2"></i> 发布文章';
+
+                // 滚动到成功消息
+                uploadSuccess.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+                // 重置表单
+                uploadForm.reset();
+                fileName.textContent = '支持 .md 格式文件';
+                previewSection.classList.add('hidden');
+            }, 2000);
+        });
+
+        // 文章卡片点击事件
+        const articles = document.querySelectorAll('article');
+        const articleModal = document.getElementById('article-modal');
+        const modalTitle = document.getElementById('modal-title');
+        const modalContent = document.getElementById('modal-content');
+        const closeModal = document.getElementById('close-modal');
+
+        articles.forEach(article => {
+            article.addEventListener('click', function(e) {
+                if (e.target.closest('a')) return;
+
+                const title = this.querySelector('h3').textContent;
+                const content = `
+                    <h1>${title}</h1>
+                    <p>这是一篇关于${title}的详细文章。在这篇文章中，我们将深入探讨Python开发中的各种技术和最佳实践。</p>
+                    <h2>引言</h2>
+                    <p>Python是一种高级编程语言，具有简单易学、功能强大的特点。它广泛应用于Web开发、数据科学、人工智能等领域。</p>
+                    <h2>主要内容</h2>
+                    <p>在本文中，我们将探讨以下几个方面：</p>
+                    <ul>
+                        <li>Python基础知识和语法</li>
+                        <li>常用的Python库和框架</li>
+                        <li>高级编程技术和设计模式</li>
+                        <li>最佳实践和性能优化</li>
+                    </ul>
+                    <h2>代码示例</h2>
+                    <pre><code class="python">
+def hello_world():
+    print("Hello, World!")
+
+# 使用列表推导式创建一个平方数列表
+squares = [x**2 for x in range(10)]
+print(squares)  # 输出: [0, 1, 4, 9, 16, 25, 36, 49, 64, 81]
+
+# 使用装饰器实现函数执行时间统计
+import time
+
+def timer_decorator(func):
+    def wrapper(*args, **kwargs):
+        start_time = time.time()
+        result = func(*args, **kwargs)
+        end_time = time.time()
+        print(f"{func.__name__} 执行时间: {end_time - start_time} 秒")
+        return result
+    return wrapper
+
+@timer_decorator
+def long_running_function():
+    time.sleep(2)
+    return "完成"
+                    </code></pre>
+                    <h2>结论</h2>
+                    <p>通过本文的学习，你应该对Python开发有了更深入的了解。继续实践和探索，你将成为一名优秀的Python开发者！</p>
+                `;
+
+                modalTitle.textContent = title;
+                modalContent.querySelector('.markdown-content').innerHTML = content;
+
+                // 为代码块添加语法高亮
+                setTimeout(() => {
+                    document.querySelectorAll('#modal-content pre code').forEach((block) => {
+                        hljs.highlightElement(block);
+                    });
+                }, 100);
+
+                articleModal.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+            });
+        });
+
+        closeModal.addEventListener('click', () => {
+            articleModal.classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        });
+
+        // 点击模态框外部关闭
+        articleModal.addEventListener('click', (e) => {
+            if (e.target === articleModal) {
+                articleModal.classList.add('hidden');
+                document.body.style.overflow = 'auto';
+            }
+        });
+    </script>
+</body>
+</html>
