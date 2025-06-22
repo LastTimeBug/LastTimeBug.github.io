@@ -7,14 +7,12 @@ url: "https://lasttimebug.github.io/" # the base hostname & protocol for your si
 author-name:    風
 author-image:   15.jpg
 author-job:     programmer
-author-email:   your-email@domain.com # Add your email for contant form.
-author-twitter: artemsheludko_ # Add your twitter account
+author-email:   2025604832@qq.com # Add your email for contant form.
 about-author:   I am a programmer focusing on front-end development. Always hungry to keep learning.
 
 # Social settings
-social-twitter:   artemsheludko_
-social-facebook:
-social-github:    artemsheludko
+
+social-github:    LastTimeBug
 social-pinterest: artemsheludko
 social-instagram: artemsheludko_
 social-youtube:
